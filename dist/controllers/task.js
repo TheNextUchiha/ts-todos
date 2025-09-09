@@ -1,6 +1,13 @@
+import { Task } from '../model/task.js';
 let count = 0;
-const tasks = [];
 const listTasks = async (req, res) => {
+    let tasks;
+    try {
+        tasks = await Task.find({ userId: req.user.userId });
+    }
+    catch (err) {
+        return res.status(500).json({ error: err, message: 'An error occurred while fetching your tasks.' });
+    }
     return res.json(tasks);
 };
 const addTask = async (req, res) => {

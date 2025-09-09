@@ -1,19 +1,18 @@
 import type { Request, Response } from 'express';
 
-interface Task {
-    id: number;
-    name: string;
-    addedAt: Date;
-
-    finished: boolean;
-    finishedAt?: Date;
-}
+import { Task } from '../model/task.js';
 
 let count: number = 0;
 
-const tasks: Task[] = [];
-
 const listTasks = async (req: Request, res: Response) => {
+    let tasks;
+
+    try {
+        tasks = await Task.find({ userId: req.user.userId });
+    } catch (err) {
+        return res.status(500).json({ error: err, message: 'An error occurred while fetching your tasks.' });
+    }
+
     return res.json(tasks);
 };
 
