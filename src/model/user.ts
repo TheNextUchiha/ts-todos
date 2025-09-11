@@ -1,7 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose, { Model, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const UserSchema = new mongoose.Schema({
+interface IUser {
+    id: string;
+    username: string;
+    name: string;
+    password: string;
+
+    createdAt: Date;
+    lastModified: Date;
+}
+
+const UserSchema = new Schema<IUser>({
+    id: { type: String },
     username: { type: String },
     name: { type: String },
     password: { type: String },
@@ -10,6 +21,7 @@ const UserSchema = new mongoose.Schema({
     lastModified: { type: Date, default: () => new Date() },
 });
 
-const User = mongoose.model('User', UserSchema, 'user');
+const User: Model<IUser> = mongoose.model<IUser>('User', UserSchema, 'user');
 
 export { User };
+export type { IUser };

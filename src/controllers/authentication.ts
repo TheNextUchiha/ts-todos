@@ -1,8 +1,10 @@
+import bcrypt from 'bcryptjs';
+import { v4 as uuidV4 } from 'uuid';
 import type { Request, Response } from 'express';
+
 import { User } from '../model/user.js';
 
 import { validatePasswords } from '../utilities/validators.js';
-import bcrypt from 'bcryptjs';
 import { generateToken } from '../config/authentication.js';
 
 const signUp = async (req: Request, res: Response) => {
@@ -20,7 +22,7 @@ const signUp = async (req: Request, res: Response) => {
         return res.status(404).json({ message: 'User already exists.' });
     }
 
-    let user = new User({ username });
+    let user = new User({ id: uuidV4(), username });
 
     try {
         const salt = await bcrypt.genSalt();
@@ -40,6 +42,10 @@ const signUp = async (req: Request, res: Response) => {
     } catch (err) {
         return res.status(500).json({ error: err, message: 'Error generating token.' });
     }
+
+    return res.json({ token });
 };
 
-export { signUp };
+const logIn = async (req: Request, res: Response) => {};
+
+export { signUp, logIn };
