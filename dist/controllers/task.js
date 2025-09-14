@@ -6,7 +6,7 @@ const listTasks = async (req, res) => {
         tasks = await Task.find({ userId: req.user.userId });
     }
     catch (err) {
-        return res.status(500).json({ error: err, message: 'An error occurred while fetching your tasks.' });
+        return res.status(500).json({ error: err, message: req.t('error.retrieving.tasks.multiple') });
     }
     return res.json(tasks);
 };
@@ -25,7 +25,7 @@ const completeTask = async (req, res) => {
     const { id } = req.params;
     let task = tasks.filter(t => t.id === Number(id))[0];
     if (!task) {
-        return res.status(404).json({ message: 'No such task found.' });
+        return res.status(404).json({ message: req.t('error.unavailable.tasks.single') });
     }
     task.finished = true;
     task.finishedAt = new Date();
@@ -35,7 +35,7 @@ const removeTask = async (req, res) => {
     const { id } = req.params;
     const index = tasks.findIndex(t => t.id === Number(id));
     if (index < 0) {
-        return res.status(404).json({ message: 'No such task found.' });
+        return res.status(404).json({ message: req.t('error.unavailable.tasks.single') });
     }
     tasks.splice(index, 1);
     return res.json(tasks);

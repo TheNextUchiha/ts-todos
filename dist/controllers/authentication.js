@@ -10,10 +10,10 @@ const signUp = async (req, res) => {
         existingUser = await User.findOne({ username });
     }
     catch (err) {
-        return res.status(500).json({ error: err, message: 'An error occurred while fetching user details.' });
+        return res.status(500).json({ error: err, message: req.t('error.retrieving.userDetails.single') });
     }
     if (existingUser) {
-        return res.status(404).json({ message: 'User already exists.' });
+        return res.status(404).json({ message: req.t('error.inUse.username') });
     }
     let user = new User({ id: uuidV4(), username });
     try {
@@ -23,14 +23,14 @@ const signUp = async (req, res) => {
         await user.save();
     }
     catch (err) {
-        return res.status(500).json({ error: err, message: 'Error signing up the user' });
+        return res.status(500).json({ error: err, message: req.t('error.saving.user') });
     }
     let token;
     try {
         token = await generateToken(user);
     }
     catch (err) {
-        return res.status(500).json({ error: err, message: 'Error generating token.' });
+        return res.status(500).json({ error: err, message: req.t('error.generating.token') });
     }
     return res.json({ token });
 };

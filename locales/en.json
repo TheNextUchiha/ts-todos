@@ -1,0 +1,31 @@
+{
+    "error": {
+        "creating": {},
+        "exists": {},
+        "generating": {
+            "token": "An error occurred while generating the token."
+        },
+        "inUse": {
+            "username": "This username is already in use."
+        },
+        "retrieving": {
+            "tasks": {
+                "single": "",
+                "multiple": "An error occurred while retrieving the tasks."
+            },
+            "userDetails": {
+                "single": "An error occurred while retrieving the user details."
+            }
+        },
+        "saving": {
+            "user": "An error occurred while saving the user."
+        },
+        "unavailable": {
+            "task": {
+                "single": "No such task found!",
+                "multiple": ""
+            },
+            "tokenSecret": "The token secret is unavailable. Please set the environment variable."
+        }
+    }
+}

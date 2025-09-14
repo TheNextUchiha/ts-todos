@@ -1,5 +1,7 @@
 import express from 'express';
+import * as i18nextMiddleware from 'i18next-http-middleware';
 
+import i18next from './config/i18next.js';
 import mongoose from './db/index.js';
 
 import taskRoute from './routes/task.js';
@@ -7,6 +9,7 @@ import taskRoute from './routes/task.js';
 const app = express();
 
 app.use(express.json({}));
+app.use(i18nextMiddleware.handle(i18next));
 
 app.use(taskRoute);
 
