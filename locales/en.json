@@ -1,5 +1,8 @@
 {
     "error": {
+        "general": {
+            "requiredDataMissing": "Required data seems to be missing."
+        },
         "creating": {},
         "exists": {},
         "generating": {
@@ -7,6 +10,9 @@
         },
         "inUse": {
             "username": "This username is already in use."
+        },
+        "invalid": {
+            "credentials": "Invalid credentials!"
         },
         "retrieving": {
             "tasks": {
@@ -25,7 +31,8 @@
                 "single": "No such task found!",
                 "multiple": ""
             },
-            "tokenSecret": "The token secret is unavailable. Please set the environment variable."
+            "tokenSecret": "The token secret is unavailable. Please set the environment variable.",
+            "user": "No such user exists!"
         }
     }
 }

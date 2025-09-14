@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { v4 as uuidV4 } from 'uuid';
+import { v4 as uuidV4, validate } from 'uuid';
 import type { Request, Response } from 'express';
 
 import { User } from '../model/user.js';
@@ -9,6 +9,10 @@ import { generateToken } from '../config/authentication.js';
 
 const signUp = async (req: Request, res: Response) => {
     const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: req.t('error.general.requiredDataMissing') });
+    }
 
     let existingUser;
 
@@ -46,6 +50,38 @@ const signUp = async (req: Request, res: Response) => {
     return res.json({ token });
 };
 
-const logIn = async (req: Request, res: Response) => {};
+const logIn = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: req.t('error.general.requiredDataMissing') });
+    }
+
+    let user;
+
+    try {
+        user = await User.findOne({ username });
+    } catch (err) {
+        return res.status(500).json({ message: req.t('error.retrieving.userDetails.single') });
+    }
+
+    if (!user) {
+        return res.status(404).json({ message: req.t('error.unavailable.user') });
+    }
+
+    if (!validatePasswords(password, user.password)) {
+        return res.status(401).json({ message: req.t('error.invalid.credentials') });
+    }
+
+    let token;
+
+    try {
+        token = await generateToken(user);
+    } catch (err) {
+        return res.status(500).json({ message: req.t('error.generating.token') });
+    }
+
+    return res.json({ token });
+};
 
 export { signUp, logIn };

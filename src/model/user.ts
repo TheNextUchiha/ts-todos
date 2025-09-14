@@ -13,9 +13,9 @@ interface IUser {
 
 const UserSchema = new Schema<IUser>({
     id: { type: String },
-    username: { type: String },
+    username: { type: String, required: true },
     name: { type: String },
-    password: { type: String },
+    password: { type: String, required: true },
 
     createdAt: { type: Date, default: () => new Date() },
     lastModified: { type: Date, default: () => new Date() },

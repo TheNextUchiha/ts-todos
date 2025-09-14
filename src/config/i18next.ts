@@ -13,7 +13,7 @@ i18next
     .use(LanguageDetector)
     .init({
         fallbackLng: 'en',
-        backend: { loadPath: path.join(__dirname, '../locales/{{lng}}.json') },
+        backend: { loadPath: path.join(__dirname, '../../locales/{{lng}}.json') },
     });
 
 export default i18next;
