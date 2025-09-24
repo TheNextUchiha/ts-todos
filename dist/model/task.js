@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-const TaskSchema = new mongoose.Schema({
+import mongoose, { Model, Schema } from 'mongoose';
+const TaskSchema = new Schema({
     id: { type: Number },
     userId: { type: String },
     name: { type: String },

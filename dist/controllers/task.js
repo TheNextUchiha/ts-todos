@@ -1,43 +1,78 @@
+import { v4 as uuidV4 } from 'uuid';
 import { Task } from '../model/task.js';
-let count = 0;
 const listTasks = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: req.t('error.authentication.loginToContinue') });
+    }
     let tasks;
     try {
         tasks = await Task.find({ userId: req.user.userId });
     }
     catch (err) {
-        return res.status(500).json({ error: err, message: req.t('error.retrieving.tasks.multiple') });
+        return res.status(500).json({ error: err, message: req.t('error.retrieving.task.multiple') });
     }
     return res.json(tasks);
 };
 const addTask = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'error.authentication.loginToContinue' });
+    }
     const { name } = req.body;
-    const task = {
-        id: ++count,
+    const task = new Task({
+        id: uuidV4(),
         name,
+        userId: req.user.userId,
         addedAt: new Date(),
         finished: false,
-    };
-    tasks.push(task);
-    return res.json(tasks);
+    });
+    try {
+        await task.save();
+    }
+    catch (err) {
+        return res.status(500).json({ error: err, message: req.t('error.creating.task') });
+    }
+    return res.json(task);
 };
 const completeTask = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'error.authentication.loginToContinue' });
+    }
     const { id } = req.params;
-    let task = tasks.filter(t => t.id === Number(id))[0];
+    let task;
+    try {
+        task = await Task.findOne({ id, userId: req.user.userId });
+    }
+    catch (err) {
+        return res.status(500).json({ message: req.t('error.retrieving.task.single') });
+    }
     if (!task) {
-        return res.status(404).json({ message: req.t('error.unavailable.tasks.single') });
+        return res.status(404).json({ message: req.t('error.unavailable.task.single') });
     }
     task.finished = true;
     task.finishedAt = new Date();
-    return res.json(tasks);
+    try {
+        await task.save();
+    }
+    catch (err) {
+        return res.status(500).json({ message: req.t('error.saving.task') });
+    }
+    return res.json(task);
 };
 const removeTask = async (req, res) => {
-    const { id } = req.params;
-    const index = tasks.findIndex(t => t.id === Number(id));
-    if (index < 0) {
-        return res.status(404).json({ message: req.t('error.unavailable.tasks.single') });
+    if (!req.user) {
+        return res.status(401).json({ message: 'error.authentication.loginToContinue' });
     }
-    tasks.splice(index, 1);
-    return res.json(tasks);
+    const { id } = req.params;
+    let task;
+    try {
+        task = await Task.deleteOne({ id, userId: req.user.userId });
+    }
+    catch (err) {
+        return res.status(500).json({ message: req.t('error.deleting.tasks.single') });
+    }
+    if (task.deletedCount <= 0) {
+        return res.status(404).json({ message: req.t('error.unavailable.task.single') });
+    }
+    return res.json({ message: req.t('success.task.deleted.single') });
 };
 export { listTasks, addTask, completeTask, removeTask };

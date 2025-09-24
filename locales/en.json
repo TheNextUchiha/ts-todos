@@ -1,9 +1,14 @@
 {
     "error": {
+        "authentication": {
+            "loginToContinue": "Please login to continue using..."
+        },
         "general": {
             "requiredDataMissing": "Required data seems to be missing."
         },
-        "creating": {},
+        "creating": {
+            "task": "An error occurred while creating the task."
+        },
         "exists": {},
         "generating": {
             "token": "An error occurred while generating the token."
@@ -15,8 +20,8 @@
             "credentials": "Invalid credentials!"
         },
         "retrieving": {
-            "tasks": {
-                "single": "",
+            "task": {
+                "single": "An error occurred while retrieving the task.",
                 "multiple": "An error occurred while retrieving the tasks."
             },
             "userDetails": {
@@ -24,6 +29,7 @@
             }
         },
         "saving": {
+            "task": "An error occurred while saving the task.",
             "user": "An error occurred while saving the user."
         },
         "unavailable": {
@@ -33,6 +39,15 @@
             },
             "tokenSecret": "The token secret is unavailable. Please set the environment variable.",
             "user": "No such user exists!"
+        }
+    },
+
+    "success": {
+        "deleted": {
+            "task": {
+                "single": "The task was deleted successfully!",
+                "multiple": "The tasks were deleted successfully!"
+            }
         }
     }
 }

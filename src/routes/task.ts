@@ -1,14 +1,15 @@
 import { Router } from 'express';
 import { addTask, completeTask, listTasks, removeTask } from '../controllers/task.js';
+import { validateToken } from '../middleware/authenticate.js';
 
 const router = Router();
 
-router.get('/', listTasks);
+router.get('/', validateToken, listTasks);
 
-router.post('/', addTask);
+router.post('/', validateToken, addTask);
 
-router.put('/:id', completeTask);
+router.put('/:id', validateToken, completeTask);
 
-router.delete('/:id', removeTask);
+router.delete('/:id', validateToken, removeTask);
 
 export default router;
