@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { Task } from '../model/task.js';
 
-import type { AuthRequest } from '../config/authentication.js';
+import type { AuthRequest } from '../types/express.js';
 import type { Response } from 'express';
 
 const listTasks = async (req: AuthRequest, res: Response) => {

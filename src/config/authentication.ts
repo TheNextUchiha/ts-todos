@@ -2,13 +2,9 @@ import i18next from 'i18next';
 import jwt from 'jsonwebtoken';
 
 import type { IUser } from '../model/user.js';
-import type { Request } from 'express';
+import type { JWTPayload } from '../types/express.js';
 
 const { JWT_EXPIRY_WINDOW, TOKEN_SECRET } = process.env;
-
-interface JWTPayload {
-    userId: string;
-}
 
 const expiresIn: number = JWT_EXPIRY_WINDOW
     ? JWT_EXPIRY_WINDOW.split(' * ').reduce<number>((acc, val) => acc * Number(val), 1)
@@ -25,7 +21,3 @@ const generateToken = async (user: IUser) => {
 };
 
 export { generateToken };
-export type { JWTPayload };
-export interface AuthRequest extends Request {
-    user?: JWTPayload;
-}
